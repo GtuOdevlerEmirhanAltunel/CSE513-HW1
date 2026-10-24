@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Interactive simulator for FCFS, SJF, SRTF, and round-robin CPU scheduling." />
+    <title>CPU Scheduling Lab</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="#top" aria-label="CPU Scheduling Lab home">
+        <span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></span>
+        <span>CPU Scheduling Lab</span>
+      </a>
+      <span class="course-tag">CSE513 · Assignment 1</span>
+    </header>
+
+    <main id="top">
+      <section class="hero" aria-labelledby="page-title">
+        <div>
+          <p class="eyebrow">Interactive simulator</p>
+          <h1 id="page-title">See every scheduling decision.</h1>
+          <p class="lede">Build a workload, choose a policy, and trace exactly how one CPU shares its time.</p>
+        </div>
+        <div class="hero-note">
+          <span class="pulse" aria-hidden="true"></span>
+          <div><strong>Deterministic rules</strong><br />Assignment tie-breaks built in</div>
+        </div>
+      </section>
+
+      <section class="workspace" aria-label="Simulator controls">
+        <div class="panel setup-panel">
+          <div class="panel-heading">
+            <div>
+              <p class="step">01 · Workload</p>
+              <h2>Processes</h2>
+            </div>
+            <div class="preset-group" aria-label="Example workloads">
+              <button class="text-button" type="button" data-workload="A">Load A</button>
+              <button class="text-button" type="button" data-workload="B">Load B</button>
+            </div>
+          </div>
+
+          <div class="process-header" aria-hidden="true">
+            <span>ID</span><span>Arrival</span><span>Burst</span><span></span>
+          </div>
+          <div id="process-list" class="process-list"></div>
+          <button id="add-process" class="add-button" type="button"><span>+</span> Add process</button>
+        </div>
+
+        <div class="panel policy-panel">
+          <div class="panel-heading">
+            <div>
+              <p class="step">02 · Policy</p>
+              <h2>Algorithm</h2>
+            </div>
+          </div>
+          <fieldset class="algorithm-list">
+            <legend class="sr-only">Select algorithm</legend>
+            <label class="algorithm-option">
+              <input type="radio" name="algorithm" value="FCFS" checked />
+              <span><b>FCFS</b><small>Arrival order</small></span>
+            </label>
+            <label class="algorithm-option">
+              <input type="radio" name="algorithm" value="SJF" />
+              <span><b>SJF</b><small>Shortest burst, non-preemptive</small></span>
+            </label>
+            <label class="algorithm-option">
+              <input type="radio" name="algorithm" value="SRTF" />
+              <span><b>SRTF</b><small>Shortest remaining, preemptive</small></span>
+            </label>
+            <label class="algorithm-option">
+              <input type="radio" name="algorithm" value="RR" />
+              <span><b>Round Robin</b><small>FIFO time slices</small></span>
+            </label>
+          </fieldset>
+          <label id="quantum-field" class="quantum-field" hidden>
+            <span>Time quantum</span>
+            <input id="quantum" type="number" min="1" step="1" value="2" inputmode="numeric" />
+          </label>
+          <button id="run-simulation" class="run-button" type="button">
+            Run simulation <span aria-hidden="true">→</span>
+          </button>
+          <div id="errors" class="error-box" role="alert" hidden></div>
+        </div>
+      </section>
+
+      <section id="results" class="results" aria-labelledby="results-heading">
+        <div class="results-heading">
+          <div>
+            <p class="step">03 · Results</p>
+            <h2 id="results-heading">Schedule trace</h2>
+          </div>
+          <span id="run-label" class="run-label"></span>
+        </div>
+
+        <div class="gantt-card">
+          <div class="card-title-row">
+            <h3>Gantt chart</h3>
+            <div id="legend" class="legend" aria-label="Process color legend"></div>
+          </div>
+          <div id="gantt-scroll" class="gantt-scroll">
+            <div id="gantt" class="gantt" aria-label="Gantt chart"></div>
+          </div>
+          <p id="timeline-text" class="timeline-text"></p>
+        </div>
+
+        <div id="averages" class="averages" aria-label="Average metrics"></div>
+
+        <div class="table-card">
+          <div class="card-title-row">
+            <h3>Per-process metrics</h3>
+            <span id="verification-badge" class="verification-badge"></span>
+          </div>
+          <div class="table-scroll">
+            <table>
+              <thead><tr><th>Process</th><th>Arrival</th><th>Burst</th><th>First start</th><th>Completion</th><th>Turnaround</th><th>Waiting</th><th>Response</th></tr></thead>
+              <tbody id="metrics-body"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <details class="rules-card">
+          <summary>How decisions are made</summary>
+          <p id="decision-note"></p>
+          <p>Ties prefer earlier arrival, then earlier input position. Intervals use <strong>[start, end)</strong>, so 2–5 is three CPU units.</p>
+        </details>
+      </section>
+    </main>
+
+    <footer>Built as a transparent teaching tool: all scheduling runs locally in your browser.</footer>
+    <script type="module" src="app.js"></script>
+  </body>
+</html>

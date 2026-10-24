@@ -1,0 +1,13 @@
+{
+  "name": "cse513-cpu-scheduler",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node scripts/dev.js",
+    "build": "node scripts/build.js",
+    "test": "node test/scheduler.test.js",
+    "screenshots": "npm run build && node scripts/screenshots.js",
+    "report": "cd report && mkdir -p build && latexmk -pdf -interaction=nonstopmode -halt-on-error -outdir=build report.tex"
+  }
+}

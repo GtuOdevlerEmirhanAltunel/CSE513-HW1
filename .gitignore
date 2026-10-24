@@ -1,0 +1,14 @@
+report/*.aux
+report/*.fdb_latexmk
+report/*.fls
+report/*.log
+report/*.out
+report/*.toc
+report/build/*.aux
+report/build/*.fdb_latexmk
+report/build/*.fls
+report/build/*.log
+report/build/*.out
+report/build/*.toc
+report/build/*.synctex.gz
+dist/*

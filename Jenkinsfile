@@ -20,6 +20,20 @@ pipeline {
             }
         }
 
+        stage('Report build started') {
+            steps {
+                // Uses the credentials from the GitHub server configured in Jenkins.
+                step([
+                    $class: 'GitHubSetCommitStatusBuilder',
+                    contextSource: [
+                        $class: 'ManuallyEnteredCommitContextSource',
+                        context: 'continuous-integration/jenkins'
+                    ],
+                    statusMessage: [content: 'Jenkins build is running']
+                ])
+            }
+        }
+
         stage('Check agent') {
             steps {
                 sh '''
@@ -59,6 +73,18 @@ pipeline {
     }
 
     post {
+        always {
+            // Replace the pending status with the final Jenkins build result.
+            step([
+                $class: 'GitHubCommitStatusSetter',
+                contextSource: [
+                    $class: 'ManuallyEnteredCommitContextSource',
+                    context: 'continuous-integration/jenkins'
+                ],
+                errorHandlers: [[$class: 'ShallowAnyErrorHandler']],
+                statusResultSource: [$class: 'DefaultStatusResultSource']
+            ])
+        }
         success {
             echo 'Build, tests, and deployment completed successfully.'
         }
